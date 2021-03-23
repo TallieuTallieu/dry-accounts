@@ -1,11 +1,11 @@
 {
-  "name": "reinvanoyen/dry-accounts",
+  "name": "tallieutallieu/dry-accounts",
   "description": "Account system for DRY applications",
   "type": "library",
   "require": {
-    "reinvanoyen/oak": "^1.0.6",
-    "dietervyncke/dry-dbi": "^1.0.2",
-    "dietervyncke/dry-external-api": "^1.0.0",
+    "tallieutallieu/oak": "^1.0.6",
+    "tallieutallieu/dry-dbi": "^1.0.2",
+    "tallieutallieu/dry-external-api": "^1.0.0",
     "lindelius/php-jwt": "^0.8.1"
   },
   "autoload": {

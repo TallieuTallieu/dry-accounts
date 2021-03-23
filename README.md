@@ -3,7 +3,7 @@ Account system for DRY applications
 
 #### Installation
 ```ssh
-composer require reinvanoyen/dry-accounts
+composer require tallieutallieu/dry-accounts
 
 php oak migration migrate -m accounts
 ```
