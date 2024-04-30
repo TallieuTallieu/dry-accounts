@@ -6,7 +6,7 @@
     "tallieutallieu/oak": "^1.1",
     "tallieutallieu/dry-dbi": "^1.0.2",
     "tallieutallieu/dry-external-api": "^1.0.0",
-    "lindelius/php-jwt": "^0.8.1"
+    "lindelius/php-jwt": "^0.9.1"
   },
   "autoload": {
     "psr-4": {
