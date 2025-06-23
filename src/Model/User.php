@@ -9,6 +9,7 @@ use Tnt\Account\Contracts\AuthenticatableInterface;
 use Tnt\Account\Contracts\RegisterableInterface;
 use Tnt\Account\Events\Activated;
 use Tnt\Account\Events\Created;
+use Tnt\Account\Events\Reset;
 
 class User extends Model implements AuthenticatableInterface, RegisterableInterface
 {
@@ -38,7 +39,7 @@ class User extends Model implements AuthenticatableInterface, RegisterableInterf
             $this->updated = time();
 
             $this->setPassword($this->password);
-            $this->temp_token = \dry\util\string\random(10);
+            $this->{self::$tokenName} = uniqid('acivate_', true);
             parent::save();
 
             Dispatcher::dispatch(Created::class, new Created($this));
@@ -52,6 +53,26 @@ class User extends Model implements AuthenticatableInterface, RegisterableInterf
     /**
      * implements RegisterableInterface
      */
+
+    /**
+     * Reset password
+     *
+     * @param string $email 
+     * @return bool
+     */
+    public static function passwordReset(string $email): bool
+    {
+        try {
+            $user = self::load_by('email', $email);
+            $user->{self::$tokenName} = uniqid('reset_', true);
+            $user->save();
+
+            Dispatcher::dispatch(Reset::class, new Reset($user));
+            return true;
+        } catch (FetchException $exception) {
+            return false;
+        }
+    }
 
     /**
      * @param string $identifier
