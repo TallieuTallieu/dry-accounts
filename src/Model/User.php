@@ -5,16 +5,28 @@ namespace Tnt\Account\Model;
 use dry\orm\Model;
 use dry\orm\special\Boolean;
 use Oak\Dispatcher\Facade\Dispatcher;
-use Tnt\Account\Contracts\AuthenticatableInterface;
-use Tnt\Account\Contracts\RegisterableInterface;
-use Tnt\Account\Events\Activated;
+use Tnt\Account\Contracts\User\UserInterface;
 use Tnt\Account\Events\Created;
-use Tnt\Account\Events\Reset;
+use Tnt\Account\Traits\User\AuthenticatableTrait;
+use Tnt\Account\Traits\User\ActivatableTrait;
+use Tnt\Account\Traits\User\ResetableTrait;
 
-class User extends Model implements AuthenticatableInterface, RegisterableInterface
+/**
+ * User model class representing an account user.
+ * 
+ * @property int $id User unique identifier
+ * @property string $email User email address
+ * @property string $password Hashed password
+ * @property string $password_salt Password salt for hashing
+ * @property string $temp_token Temporary activation token
+ * @property string $reset_token Password reset token
+ * @property bool $is_activated Whether the user account is activated
+ * @property int $created Timestamp when user was created
+ * @property int $updated Timestamp when user was last updated
+ */
+class User extends Model implements UserInterface
 {
-    protected static $authIdentifierName = 'email';
-    protected static $tokenName = 'temp_token';
+    use AuthenticatableTrait, ActivatableTrait, ResetableTrait;
 
     const TABLE = 'account_user';
 
@@ -22,24 +34,14 @@ class User extends Model implements AuthenticatableInterface, RegisterableInterf
         'is_activated' => Boolean::class,
     ];
 
-    public function activate()
-    {
-        $this->is_activated = true;
-        $this->temp_token = null;
-        $this->save();
-
-        Dispatcher::dispatch(Activated::class, new Activated($this));
-    }
-
     public function save()
     {
-        if (! $this->id) {
-
+        if (!$this->id) {
             $this->created = time();
             $this->updated = time();
 
             $this->setPassword($this->password);
-            $this->{self::$tokenName} = uniqid('acivate_', true);
+            $this->prepActivate();
             parent::save();
 
             Dispatcher::dispatch(Created::class, new Created($this));
@@ -50,91 +52,4 @@ class User extends Model implements AuthenticatableInterface, RegisterableInterf
         parent::save();
     }
 
-    /**
-     * implements RegisterableInterface
-     */
-
-    /**
-     * Reset password
-     *
-     * @param string $email 
-     * @return bool
-     */
-    public static function passwordReset(string $email): bool
-    {
-        try {
-            $user = self::load_by('email', $email);
-            $user->{self::$tokenName} = uniqid('reset_', true);
-            $user->save();
-
-            Dispatcher::dispatch(Reset::class, new Reset($user));
-            return true;
-        } catch (FetchException $exception) {
-            return false;
-        }
-    }
-
-    /**
-     * @param string $identifier
-     * @param string $password
-     * @return null|AuthenticatableInterface
-     */
-    public static function register(string $identifier, string $password): ?AuthenticatableInterface
-    {
-        $user = new User();
-        $user->email = $identifier;
-        $user->password = $password;
-        $user->save();
-
-        return $user;
-    }
-
-    /**
-     * implements AuthenticatableInterface
-     */
-
-    /**
-     * @return mixed
-     */
-    public function getIdentifier(): int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
-
-    /**
-     * @return string
-     */
-    public static function getAuthIdentifierName(): string
-    {
-        return static::$authIdentifierName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAuthIdentifier(): ?string
-    {
-        if (!isset($this->{$this->getAuthIdentifierName()})) {
-            return null;
-        }
-
-        return $this->{$this->getAuthIdentifierName()};
-    }
-
-    /**
-     * @param string $password
-     */
-    public function setPassword(string $password)
-    {
-        $this->password_salt = \dry\util\string\random(10);
-        $this->password = md5($password.$this->password_salt);
-    }
 }

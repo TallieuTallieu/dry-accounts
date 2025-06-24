@@ -1,2 +1,5 @@
 .idea
 .wakatime-project
+vendor
+.yarn
+node_modules

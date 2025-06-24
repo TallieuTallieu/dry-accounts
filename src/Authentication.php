@@ -18,6 +18,11 @@ use Tnt\Account\Events\Logout;
 class Authentication implements AuthenticationInterface
 {
     /**
+     * @var string
+     */
+    private $model;
+
+    /**
      * @var UserStorageInterface $userStorage
      */
     private $userStorage;
@@ -34,15 +39,33 @@ class Authentication implements AuthenticationInterface
 
     /**
      * Authentication constructor.
+     * @param string $model
      * @param UserStorageInterface $userStorage
      * @param UserRepositoryInterface $userRepository
      * @param UserFactoryInterface $userFactory
      */
-    public function __construct(UserStorageInterface $userStorage, UserRepositoryInterface $userRepository, UserFactoryInterface $userFactory = null)
-    {
+    public function __construct(
+        UserStorageInterface $userStorage,
+        UserRepositoryInterface $userRepository,
+        UserFactoryInterface $userFactory,
+        string $model
+    ) {
+        $this->model = $model;
         $this->userStorage = $userStorage;
         $this->userRepository = $userRepository;
         $this->userFactory = $userFactory;
+    }
+
+    public function resetPassword(string $authIdentifier): bool
+    {
+        $authIdentifierField = $this->model::getAuthIdentifierField();
+        try {
+            $user = $this->model::load_by('email', $authIdentifier);
+            $user->{$this->model::getResetTokenField()} = uniqid('reset_', true);
+            $user->save();
+        } catch (FetchException $exception) {
+            return false;
+        }
     }
 
     /**
@@ -50,14 +73,11 @@ class Authentication implements AuthenticationInterface
      * @param string $password
      * @return null|AuthenticatableInterface
      */
-    public function register(string $authIdentifier, string $password): ?AuthenticatableInterface
-    {
-        if ($this->userFactory) {
-
-            return $this->userFactory->register($authIdentifier, $password);
-        }
-
-        return null;
+    public function register(
+        string $authIdentifier,
+        string $password
+    ): ?AuthenticatableInterface {
+        return $this->userFactory->register($authIdentifier, $password);
     }
 
     /**
@@ -67,14 +87,18 @@ class Authentication implements AuthenticationInterface
      */
     public function authenticate(string $authIdentifier, string $password): bool
     {
-        if (! $this->userStorage->isValid()) {
-
-            $user = $this->userRepository->withCredentials($authIdentifier, $password);
+        if (!$this->userStorage->isValid()) {
+            $user = $this->userRepository->withCredentials(
+                $authIdentifier,
+                $password
+            );
 
             if ($user) {
-
                 // Dispatch the Authenticated event
-                Dispatcher::dispatch(Authenticated::class, new Authenticated($user));
+                Dispatcher::dispatch(
+                    Authenticated::class,
+                    new Authenticated($user)
+                );
 
                 // Store the user
                 $this->userStorage->store($user);
@@ -92,7 +116,6 @@ class Authentication implements AuthenticationInterface
     public function logout()
     {
         if ($this->isAuthenticated()) {
-
             $user = $this->userStorage->retrieve();
             $this->userStorage->clear();
 
@@ -121,8 +144,10 @@ class Authentication implements AuthenticationInterface
      * @param string $authIdentifier
      * @return null|AuthenticatableInterface
      */
-    public function getActivatedUser(string $authIdentifier): ?AuthenticatableInterface
-    {
+    public function getActivatedUser(
+        string $authIdentifier
+    ): ?AuthenticatableInterface {
         return $this->userRepository->getActivated($authIdentifier);
     }
 }
+

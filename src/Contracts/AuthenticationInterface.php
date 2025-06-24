@@ -2,7 +2,7 @@
 
 namespace Tnt\Account\Contracts;
 
-Interface AuthenticationInterface
+interface AuthenticationInterface
 {
     /**
      * @param string $authIdentifier
