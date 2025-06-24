@@ -3,7 +3,7 @@
 namespace Tnt\Account\Events;
 
 use Oak\Dispatcher\Event;
-use Tnt\Account\Contracts\AuthenticatableInterface;
+use Tnt\Account\Contracts\User\UserInterface;
 
 /**
  * Class UserEvent
@@ -12,23 +12,23 @@ use Tnt\Account\Contracts\AuthenticatableInterface;
 abstract class UserEvent extends Event
 {
     /**
-     * @var AuthenticatableInterface $user
+     * @var UserInterface $user
      */
     private $user;
 
     /**
      * Activated constructor.
-     * @param AuthenticatableInterface $user
+     * @param UserInterface $user
      */
-    public function __construct(AuthenticatableInterface $user)
+    public function __construct(UserInterface $user)
     {
         $this->user = $user;
     }
 
     /**
-     * @return AuthenticatableInterface
+     * @return UserInterface
      */
-    public function getUser(): AuthenticatableInterface
+    public function getUser(): UserInterface
     {
         return $this->user;
     }

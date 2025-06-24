@@ -26,9 +26,8 @@ class AccountServiceProvider extends ServiceProvider
         Api::post('1', 'refresh-token', AuthController::class, 'refreshToken');
 
         if ($app->isRunningInConsole()) {
-
             $migrator = $app->getWith(Migrator::class, [
-                'name' => 'account'
+                'name' => 'account',
             ]);
 
             $migrator->setRevisions([
@@ -46,16 +45,24 @@ class AccountServiceProvider extends ServiceProvider
 
         $model = $config->get('accounts.model', User::class);
 
-        $app->set(UserStorageInterface::class, $config->get('accounts.storage', SessionUserStorage::class));
+        $app->set(
+            UserStorageInterface::class,
+            $config->get('accounts.storage', SessionUserStorage::class)
+        );
 
         $factory = $config->get('accounts.factory', UserFactory::class);
         $app->set(UserFactoryInterface::class, $factory);
         $app->whenAsksGive($factory, 'model', $model);
 
-        $repository = $config->get('accounts.repository', UserRepository::class);
+        $repository = $config->get(
+            'accounts.repository',
+            UserRepository::class
+        );
         $app->set(UserRepositoryInterface::class, $repository);
         $app->whenAsksGive($repository, 'model', $model);
 
         $app->set(AuthenticationInterface::class, Authentication::class);
+        $app->whenAsksGive(Authentication::class, 'model', $model);
     }
 }
+
