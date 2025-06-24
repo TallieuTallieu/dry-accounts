@@ -3,9 +3,9 @@
   "description": "Account system for DRY applications",
   "type": "library",
   "require": {
-    "tallieutallieu/oak": "^1.1",
-    "tallieutallieu/dry-dbi": "^1.0.2",
-    "tallieutallieu/dry-external-api": "^1.0.0",
+    "tallieutallieu/oak": "^1.1.9",
+    "tallieutallieu/dry-dbi": "^1.0.22",
+    "tallieutallieu/dry-external-api": "^2.0.1",
     "lindelius/php-jwt": "^0.9.1"
   },
   "autoload": {
