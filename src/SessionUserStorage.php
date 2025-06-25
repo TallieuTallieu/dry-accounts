@@ -8,6 +8,10 @@ use Tnt\Account\Contracts\User\UserInterface;
 use Tnt\Account\Contracts\UserRepositoryInterface;
 use Tnt\Account\Contracts\UserStorageInterface;
 
+/**
+ * Session-based user storage implementation.
+ * Stores user identifiers in the session and retrieves users via repository.
+ */
 class SessionUserStorage implements UserStorageInterface
 {
     /**
@@ -17,7 +21,8 @@ class SessionUserStorage implements UserStorageInterface
 
     /**
      * SessionUserStorage constructor.
-     * @param UserRepositoryInterface $userRepository,
+     *
+     * @param UserRepositoryInterface $userRepository Repository for user data access
      */
     public function __construct(UserRepositoryInterface $userRepository)
     {
@@ -25,8 +30,10 @@ class SessionUserStorage implements UserStorageInterface
     }
 
     /**
-     * @param AuthenticatableInterface $user
-     * @return mixed|void
+     * Store a user identifier in the session.
+     *
+     * @param UserInterface $user The user to store
+     * @return void
      */
     public function store(UserInterface $user)
     {
@@ -35,28 +42,27 @@ class SessionUserStorage implements UserStorageInterface
     }
 
     /**
-     * @return null|AuthenticatableInterface
+     * Retrieve the user from session using stored identifier.
+     *
+     * @return UserInterface|null The user instance or null if not found
      */
     public function retrieve(): ?UserInterface
     {
-        if ($this->isValid()) {
-
-            $user = $this->userRepository->withIdentifier(Session::get('user'));
-
-            if ($user) {
-                return $user;
-            }
+        if ($this->isEmpty()) {
+            return null;
         }
 
-        return null;
+        return $this->userRepository->withIdentifier(Session::get('user'));
     }
 
     /**
-     * @return bool
+     * Check if the session contains a valid user.
+     *
+     * @return bool True if session is valid and user exists, false otherwise
      */
     public function isValid(): bool
     {
-        if (!Session::has('user') || !Session::get('user')) {
+        if ($this->isEmpty()) {
             return false;
         }
 
@@ -70,7 +76,19 @@ class SessionUserStorage implements UserStorageInterface
     }
 
     /**
-     * @return mixed|void
+     * Check if the session storage is empty (no user identifier stored).
+     * 
+     * @return bool True if session is empty, false otherwise
+     */
+    public function isEmpty(): bool
+    {
+        return !Session::has('user') || empty(Session::get('user'));
+    }
+
+    /**
+     * Clear the user identifier from the session.
+     *
+     * @return void
      */
     public function clear()
     {
