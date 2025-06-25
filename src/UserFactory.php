@@ -2,8 +2,6 @@
 
 namespace Tnt\Account;
 
-use Tnt\Account\Contracts\AuthenticatableInterface;
-use Tnt\Account\Contracts\RegisterableInterface;
 use Tnt\Account\Contracts\User\UserInterface;
 use Tnt\Account\Contracts\UserFactoryInterface;
 use Tnt\Account\Contracts\UserRepositoryInterface;
