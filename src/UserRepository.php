@@ -3,7 +3,6 @@
 namespace Tnt\Account;
 
 use dry\db\FetchException;
-use Tnt\Account\Contracts\User\AuthenticatableInterface;
 use Tnt\Account\Contracts\User\UserInterface;
 use Tnt\Account\Contracts\UserRepositoryInterface;
 use Tnt\Dbi\BaseRepository;
@@ -59,7 +58,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         try {
             $this->addCriteria(
                 new Equals(
-                    $this->model::getAuthIdentifierName(),
+                    $this->model::getAuthIdentifierField(),
                     $authIdentifier
                 )
             );
