@@ -2,18 +2,20 @@
 
 namespace Tnt\Account\Contracts;
 
+use Tnt\Account\Contracts\User\UserInterface;
+
 interface UserStorageInterface
 {
     /**
-     * @param AuthenticatableInterface $user
+     * @param UserInterface $user
      * @return mixed
      */
-    public function store(AuthenticatableInterface $user);
+    public function store(UserInterface $user);
 
     /**
-     * @return null|AuthenticatableInterface
+     * @return null|UserInterface
      */
-    public function retrieve(): ?AuthenticatableInterface;
+    public function retrieve(): ?UserInterface;
 
     /**
      * @return bool
