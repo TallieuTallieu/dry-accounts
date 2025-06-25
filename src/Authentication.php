@@ -3,7 +3,6 @@
 namespace Tnt\Account;
 
 use Oak\Dispatcher\Facade\Dispatcher;
-use Tnt\Account\Contracts\AuthenticatableInterface;
 use Tnt\Account\Contracts\AuthenticationInterface;
 use Tnt\Account\Contracts\User\UserInterface;
 use Tnt\Account\Contracts\UserFactoryInterface;
