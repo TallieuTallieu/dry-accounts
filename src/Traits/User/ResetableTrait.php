@@ -14,18 +14,21 @@ trait ResetableTrait
      */
     public function getResetToken(): ?string
     {
-        return $this->{static::$resetTokenName};
+        return $this->{static::getResetTokenField()};
     }
 
     /**
      * Set the password reset token for the user.
      *
-     * @param string|null $token The reset token to set, or null to clear
+     * @param string|null $token The reset token to set, or null to clear, pass an empty string (default) to use uniqid
      * @return static The current instance for method chaining
      */
-    public function setResetToken(?string $token): self
+    public function setResetToken(?string $token = ''): self
     {
-        $this->{static::$resetTokenName} = $token;
+        if (($token)) {
+            return $token = uniqid('reset_', true);
+        }
+        $this->{static::getResetTokenField()} = $token;
         return $this;
     }
 
@@ -36,7 +39,7 @@ trait ResetableTrait
      */
     public function hasResetToken(): bool
     {
-        return !empty($this->{static::$resetTokenName});
+        return !empty($this->getResetToken();
     }
 
     /**
@@ -46,7 +49,7 @@ trait ResetableTrait
      */
     public function clearResetToken(): self
     {
-        $this->{static::$resetTokenName} = null;
+        $this->{static::getResetTokenField()} = null;
         return $this;
     }
 
@@ -64,4 +67,3 @@ trait ResetableTrait
         return 'reset_token';
     }
 }
-

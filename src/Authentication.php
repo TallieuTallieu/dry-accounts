@@ -5,6 +5,7 @@ namespace Tnt\Account;
 use Oak\Dispatcher\Facade\Dispatcher;
 use Tnt\Account\Contracts\AuthenticatableInterface;
 use Tnt\Account\Contracts\AuthenticationInterface;
+use Tnt\Account\Contracts\User\UserInterface;
 use Tnt\Account\Contracts\UserFactoryInterface;
 use Tnt\Account\Contracts\UserRepositoryInterface;
 use Tnt\Account\Contracts\UserStorageInterface;
@@ -18,7 +19,7 @@ use Tnt\Account\Events\Logout;
 class Authentication implements AuthenticationInterface
 {
     /**
-     * @var string
+     * @var class-string<UserInterface>
      */
     private $model;
 
@@ -59,10 +60,15 @@ class Authentication implements AuthenticationInterface
     public function resetPassword(string $authIdentifier): bool
     {
         $authIdentifierField = $this->model::getAuthIdentifierField();
+
         try {
-            $user = $this->model::load_by('email', $authIdentifier);
-            $user->{$this->model::getResetTokenField()} = uniqid('reset_', true);
+            $user = $this->model::load_by(
+                $authIdentifierField,
+                $authIdentifier
+            );
+            $user->setResetToken();
             $user->save();
+            return true;
         } catch (FetchException $exception) {
             return false;
         }
@@ -76,7 +82,7 @@ class Authentication implements AuthenticationInterface
     public function register(
         string $authIdentifier,
         string $password
-    ): ?AuthenticatableInterface {
+    ): ?UserInterface {
         return $this->userFactory->register($authIdentifier, $password);
     }
 
@@ -135,7 +141,7 @@ class Authentication implements AuthenticationInterface
     /**
      * @return null|AuthenticatableInterface
      */
-    public function getUser(): ?AuthenticatableInterface
+    public function getUser(): ?UserInterface
     {
         return $this->userStorage->retrieve();
     }
@@ -146,8 +152,7 @@ class Authentication implements AuthenticationInterface
      */
     public function getActivatedUser(
         string $authIdentifier
-    ): ?AuthenticatableInterface {
+    ): ?UserInterface {
         return $this->userRepository->getActivated($authIdentifier);
     }
 }
-
