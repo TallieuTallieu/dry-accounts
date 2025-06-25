@@ -77,7 +77,7 @@ class Authentication implements AuthenticationInterface
             $user->setResetToken();
             $user->save();
 
-            Dispatcher::dispatch(ResetPassword::class, $user);
+            Dispatcher::dispatch(ResetPassword::class, new ResetPassword($user));
             return true;
         } catch (FetchException $exception) {
             return false;
