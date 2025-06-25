@@ -40,10 +40,11 @@ class Authentication implements AuthenticationInterface
 
     /**
      * Authentication constructor.
-     * @param string $model
-     * @param UserStorageInterface $userStorage
-     * @param UserRepositoryInterface $userRepository
-     * @param UserFactoryInterface $userFactory
+     * 
+     * @param UserStorageInterface $userStorage User storage implementation
+     * @param UserRepositoryInterface $userRepository User repository for data access
+     * @param UserFactoryInterface $userFactory Factory for creating users
+     * @param string $model User model class name
      */
     public function __construct(
         UserStorageInterface $userStorage,
@@ -57,6 +58,12 @@ class Authentication implements AuthenticationInterface
         $this->userFactory = $userFactory;
     }
 
+    /**
+     * Reset password for a user by setting a reset token.
+     * 
+     * @param string $authIdentifier User's authentication identifier
+     * @return bool True if reset token was set successfully, false otherwise
+     */
     public function resetPassword(string $authIdentifier): bool
     {
         $authIdentifierField = $this->model::getAuthIdentifierField();
@@ -76,9 +83,11 @@ class Authentication implements AuthenticationInterface
     }
 
     /**
-     * @param string $authIdentifier
-     * @param string $password
-     * @return null|AuthenticatableInterface
+     * Register a new user with the provided credentials.
+     * 
+     * @param string $authIdentifier User's authentication identifier (email, username, etc.)
+     * @param string $password User's password
+     * @return UserInterface|null The created user instance or null if registration failed
      */
     public function register(
         string $authIdentifier,
@@ -88,13 +97,19 @@ class Authentication implements AuthenticationInterface
     }
 
     /**
-     * @param string $authIdentifier
-     * @param string $password
-     * @return bool
+     * Authenticate a user with the provided credentials.
+     * 
+     * @param string $authIdentifier User's authentication identifier
+     * @param string $password User's password
+     * @return bool True if authentication was successful, false otherwise
      */
     public function authenticate(string $authIdentifier, string $password): bool
     {
-        if (!$this->userStorage->isValid()) {
+        if ($this->userStorage->isValid()) {
+          return true;
+        }
+
+
             $user = $this->userRepository->withCredentials(
                 $authIdentifier,
                 $password
@@ -113,12 +128,13 @@ class Authentication implements AuthenticationInterface
                 return true;
             }
         }
-
-        return false;
     }
 
     /**
-     *
+     * Log out the currently authenticated user.
+     * Clears the user storage and dispatches logout event.
+     * 
+     * @return void
      */
     public function logout()
     {
@@ -132,15 +148,35 @@ class Authentication implements AuthenticationInterface
     }
 
     /**
-     * @return bool
+     * Check if a user is currently authenticated.
+     * 
+     * @return bool True if user is authenticated, false otherwise
      */
     public function isAuthenticated(): bool
     {
-        return (bool) $this->userStorage->isValid();
+        return $this->userStorage->isValid();
     }
 
     /**
-     * @return null|AuthenticatableInterface
+     * Check if a user is authenticated and their account is activated.
+     * 
+     * @return bool True if user is authenticated and activated, false otherwise
+     */
+    public function isAuthenticatedAndActivated(): bool
+    {
+        $user = $this->userStorage->retrieve();
+
+        if (empty($user)) {
+            return false;
+        }
+
+        return $user->isActivated();
+    }
+
+    /**
+     * Get the currently authenticated user.
+     * 
+     * @return UserInterface|null The authenticated user or null if not authenticated
      */
     public function getUser(): ?UserInterface
     {
@@ -148,12 +184,13 @@ class Authentication implements AuthenticationInterface
     }
 
     /**
-     * @param string $authIdentifier
-     * @return null|AuthenticatableInterface
+     * Get an activated user by their authentication identifier.
+     * 
+     * @param string $authIdentifier User's authentication identifier
+     * @return UserInterface|null The activated user or null if not found
      */
-    public function getActivatedUser(
-        string $authIdentifier
-    ): ?UserInterface {
+    public function getActivatedUser(string $authIdentifier): ?UserInterface
+    {
         return $this->userRepository->getActivated($authIdentifier);
     }
 }
