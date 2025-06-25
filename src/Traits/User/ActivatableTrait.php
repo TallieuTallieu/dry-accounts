@@ -17,7 +17,7 @@ trait ActivatableTrait
      */
     public function getToken(): string
     {
-        return $this->{static::$tokenName};
+        return $this->{static::getTempTokenField()};
     }
 
     /**
@@ -36,7 +36,7 @@ trait ActivatableTrait
      * @param bool $save Whether to save the changes immediately
      * @return static The current instance for method chaining
      */
-    public function prepActivate(bool $save = false): static
+    public function prepActivate(bool $save = false): self
     {
         $this->{static::$tokenName} = uniqid('activate_', true);
         $this->is_activated = false;
@@ -54,7 +54,7 @@ trait ActivatableTrait
      * @param bool $save Whether to save the changes immediately
      * @return static The current instance for method chaining
      */
-    public function activate(bool $save = true): static
+    public function activate(bool $save = true): self
     {
         $this->is_activated = true;
         $this->temp_token = null;

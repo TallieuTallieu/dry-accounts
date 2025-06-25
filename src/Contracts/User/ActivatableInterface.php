@@ -24,7 +24,7 @@ interface ActivatableInterface
    * @param bool $save Whether to save the changes immediately
    * @return static The current instance for method chaining
    */
-  public function prepActivate(bool $save = false): static;
+  public function prepActivate(bool $save = false): self;
 
   /**
    * Activate the user account.
@@ -32,7 +32,7 @@ interface ActivatableInterface
    * @param bool $save Whether to save the changes immediately
    * @return static The current instance for method chaining
    */
-  public function activate(bool $save = true): static;
+  public function activate(bool $save = true): self;
 
   /**
    * Get the is_activated field name

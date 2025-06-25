@@ -17,7 +17,7 @@ interface ResetableInterface
      * @param string|null $token The reset token to set, or null to clear
      * @return static The current instance for method chaining
      */
-    public function setResetToken(?string $token): static;
+    public function setResetToken(?string $token): self;
 
     /**
      * Check if a reset token is set for the user.
@@ -31,7 +31,7 @@ interface ResetableInterface
      * 
      * @return static The current instance for method chaining
      */
-    public function clearResetToken(): static;
+    public function clearResetToken(): self;
 
     /**
      * Get the reset_token field name

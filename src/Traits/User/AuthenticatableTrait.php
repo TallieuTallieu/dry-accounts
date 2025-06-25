@@ -49,7 +49,7 @@ trait AuthenticatableTrait
      * @param string $password The new password to set
      * @return static The current instance for method chaining
      */
-    public function setPassword(string $password): static
+    public function setPassword(string $password): self
     {
         // Check if password is already hashed (password_hash creates strings starting with $)
         if (!$this->isPasswordHashed($password)) {

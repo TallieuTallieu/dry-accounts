@@ -31,7 +31,7 @@ interface AuthenticatableInterface
      * @param string $password The new password to set
      * @return static The current instance for method chaining
      */
-    public function setPassword(string $password): static;
+    public function setPassword(string $password): self;
 
     /**
      * Get the email field name

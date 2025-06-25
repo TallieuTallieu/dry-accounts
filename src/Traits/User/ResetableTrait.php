@@ -23,7 +23,7 @@ trait ResetableTrait
      * @param string|null $token The reset token to set, or null to clear
      * @return static The current instance for method chaining
      */
-    public function setResetToken(?string $token): static
+    public function setResetToken(?string $token): self
     {
         $this->{static::$resetTokenName} = $token;
         return $this;
@@ -44,7 +44,7 @@ trait ResetableTrait
      *
      * @return static The current instance for method chaining
      */
-    public function clearResetToken(): static
+    public function clearResetToken(): self
     {
         $this->{static::$resetTokenName} = null;
         return $this;
