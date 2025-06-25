@@ -50,7 +50,7 @@ class UserFactory implements UserFactoryInterface
         }
 
         $newUser = new $this->model();
-        $newUser->{$newUser::getIsActivatedField()} = $authIdentifier;
+        $newUser->prepActivate();
         $newUser->setPassword($password);
         $newUser->save();
 
