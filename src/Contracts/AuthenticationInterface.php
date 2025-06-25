@@ -36,6 +36,18 @@ interface AuthenticationInterface
     ): bool;
 
     /**
+     * Authenticate a user with the provided credentials, but only if the user is activated.
+     * 
+     * @param string $authIdentifier User's authentication identifier
+     * @param string $password User's password
+     * @return bool True if authentication was successful and user is activated, false otherwise
+     */
+    public function authenticateActivated(
+        string $authIdentifier,
+        string $password
+    ): bool;
+
+    /**
      * Log out the currently authenticated user.
      * 
      * @return void

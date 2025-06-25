@@ -40,7 +40,7 @@ class Authentication implements AuthenticationInterface
 
     /**
      * Authentication constructor.
-     * 
+     *
      * @param UserStorageInterface $userStorage User storage implementation
      * @param UserRepositoryInterface $userRepository User repository for data access
      * @param UserFactoryInterface $userFactory Factory for creating users
@@ -60,7 +60,7 @@ class Authentication implements AuthenticationInterface
 
     /**
      * Reset password for a user by setting a reset token.
-     * 
+     *
      * @param string $authIdentifier User's authentication identifier
      * @return bool True if reset token was set successfully, false otherwise
      */
@@ -84,7 +84,7 @@ class Authentication implements AuthenticationInterface
 
     /**
      * Register a new user with the provided credentials.
-     * 
+     *
      * @param string $authIdentifier User's authentication identifier (email, username, etc.)
      * @param string $password User's password
      * @return UserInterface|null The created user instance or null if registration failed
@@ -98,42 +98,76 @@ class Authentication implements AuthenticationInterface
 
     /**
      * Authenticate a user with the provided credentials.
-     * 
+     *
      * @param string $authIdentifier User's authentication identifier
      * @param string $password User's password
      * @return bool True if authentication was successful, false otherwise
      */
     public function authenticate(string $authIdentifier, string $password): bool
     {
-        if ($this->userStorage->isValid()) {
-          return true;
+        if (!$this->userStorage->isEmpty()) {
+          $this->userStorage->clear();
         }
 
+        $user = $this->userRepository->withCredentials(
+            $authIdentifier,
+            $password
+        );
 
-            $user = $this->userRepository->withCredentials(
-                $authIdentifier,
-                $password
+        if ($user) {
+            // Dispatch the Authenticated event
+            Dispatcher::dispatch(
+                Authenticated::class,
+                new Authenticated($user)
             );
 
-            if ($user) {
-                // Dispatch the Authenticated event
-                Dispatcher::dispatch(
-                    Authenticated::class,
-                    new Authenticated($user)
-                );
+            // Store the user
+            $this->userStorage->store($user);
 
-                // Store the user
-                $this->userStorage->store($user);
-
-                return true;
-            }
+            return true;
         }
+
+        return false;
+    }
+
+    /**
+     * Authenticate a user with the provided credentials, but only if the user is activated.
+     *
+     * @param string $authIdentifier User's authentication identifier
+     * @param string $password User's password
+     * @return bool True if authentication was successful and user is activated, false otherwise
+     */
+    public function authenticateActivated(
+        string $authIdentifier,
+        string $password
+    ): bool {
+        if (!$this->userStorage->isEmpty()) {
+          $this->userStorage->clear();
+        }
+
+        $user = $this->userRepository->withCredentials(
+            $authIdentifier,
+            $password
+        );
+
+        if ($user && $user->isActivated()) {
+            Dispatcher::dispatch(
+                Authenticated::class,
+                new Authenticated($user)
+            );
+
+            $this->userStorage->store($user);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
      * Log out the currently authenticated user.
      * Clears the user storage and dispatches logout event.
-     * 
+     *
      * @return void
      */
     public function logout()
@@ -149,7 +183,7 @@ class Authentication implements AuthenticationInterface
 
     /**
      * Check if a user is currently authenticated.
-     * 
+     *
      * @return bool True if user is authenticated, false otherwise
      */
     public function isAuthenticated(): bool
@@ -159,7 +193,7 @@ class Authentication implements AuthenticationInterface
 
     /**
      * Check if a user is authenticated and their account is activated.
-     * 
+     *
      * @return bool True if user is authenticated and activated, false otherwise
      */
     public function isAuthenticatedAndActivated(): bool
@@ -175,7 +209,7 @@ class Authentication implements AuthenticationInterface
 
     /**
      * Get the currently authenticated user.
-     * 
+     *
      * @return UserInterface|null The authenticated user or null if not authenticated
      */
     public function getUser(): ?UserInterface
@@ -185,7 +219,7 @@ class Authentication implements AuthenticationInterface
 
     /**
      * Get an activated user by their authentication identifier.
-     * 
+     *
      * @param string $authIdentifier User's authentication identifier
      * @return UserInterface|null The activated user or null if not found
      */
