@@ -4,6 +4,7 @@ namespace Tnt\Account;
 
 use Oak\Session\Facade\Session;
 use Tnt\Account\Contracts\AuthenticatableInterface;
+use Tnt\Account\Contracts\User\UserInterface;
 use Tnt\Account\Contracts\UserRepositoryInterface;
 use Tnt\Account\Contracts\UserStorageInterface;
 
@@ -27,7 +28,7 @@ class SessionUserStorage implements UserStorageInterface
      * @param AuthenticatableInterface $user
      * @return mixed|void
      */
-    public function store(AuthenticatableInterface $user)
+    public function store(UserInterface $user)
     {
         Session::set('user', $user->getIdentifier());
         Session::save();
@@ -36,7 +37,7 @@ class SessionUserStorage implements UserStorageInterface
     /**
      * @return null|AuthenticatableInterface
      */
-    public function retrieve(): ?AuthenticatableInterface
+    public function retrieve(): ?UserInterface
     {
         if ($this->isValid()) {
 
