@@ -11,6 +11,7 @@ use Tnt\Account\Contracts\UserRepositoryInterface;
 use Tnt\Account\Contracts\UserStorageInterface;
 use Tnt\Account\Events\Authenticated;
 use Tnt\Account\Events\Logout;
+use Tnt\Account\Events\ResetPassword;
 
 /**
  * Class Authentication
@@ -76,6 +77,8 @@ class Authentication implements AuthenticationInterface
             );
             $user->setResetToken();
             $user->save();
+
+            Dispatcher::dispatch(ResetPassword::class, $user);
             return true;
         } catch (FetchException $exception) {
             return false;
@@ -106,7 +109,7 @@ class Authentication implements AuthenticationInterface
     public function authenticate(string $authIdentifier, string $password): bool
     {
         if (!$this->userStorage->isEmpty()) {
-          $this->userStorage->clear();
+            $this->userStorage->clear();
         }
 
         $user = $this->userRepository->withCredentials(
@@ -142,7 +145,7 @@ class Authentication implements AuthenticationInterface
         string $password
     ): bool {
         if (!$this->userStorage->isEmpty()) {
-          $this->userStorage->clear();
+            $this->userStorage->clear();
         }
 
         $user = $this->userRepository->withCredentials(
