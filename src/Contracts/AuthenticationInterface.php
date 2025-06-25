@@ -2,6 +2,8 @@
 
 namespace Tnt\Account\Contracts;
 
+use Tnt\Account\Contracts\User\AuthenticatableInterface;
+
 interface AuthenticationInterface
 {
     /**
