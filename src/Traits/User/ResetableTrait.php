@@ -25,8 +25,8 @@ trait ResetableTrait
      */
     public function setResetToken(?string $token = ''): self
     {
-        if (($token)) {
-            return $token = uniqid('reset_', true);
+        if (empty($token)) {
+            $token = uniqid('reset_', true);
         }
         $this->{static::getResetTokenField()} = $token;
         return $this;
@@ -39,7 +39,7 @@ trait ResetableTrait
      */
     public function hasResetToken(): bool
     {
-        return !empty($this->getResetToken();
+        return !empty($this->getResetToken());
     }
 
     /**
