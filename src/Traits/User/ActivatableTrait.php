@@ -15,7 +15,7 @@ trait ActivatableTrait
      *
      * @return string The activation token
      */
-    public function getToken(): string
+    public function getTempToken(): string
     {
         return $this->{static::getTempTokenField()};
     }
@@ -25,9 +25,9 @@ trait ActivatableTrait
      *
      * @return string The activation status
      */
-    public function getIsActivated(): string
+    public function isActivated(): string
     {
-        return $this->is_activated;
+        return $this->{static::getIsActivatedField()};
     }
 
     /**
@@ -38,7 +38,7 @@ trait ActivatableTrait
      */
     public function prepActivate(bool $save = false): self
     {
-        $this->{static::$tokenName} = uniqid('activate_', true);
+        $this->{static::getTempTokenField()} = uniqid('activate_', true);
         $this->is_activated = false;
 
         if ($save) {

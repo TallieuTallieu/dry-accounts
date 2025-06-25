@@ -9,14 +9,14 @@ interface ActivatableInterface
    * 
    * @return string The activation token
    */
-  public function getToken(): string;
+  public function getTempToken(): string;
 
   /**
    * Get the activation status of the user.
    * 
    * @return string The activation status
    */
-  public function getIsActivated(): string;
+  public function isActivated(): string;
 
   /**
    * Prepare the user for activation by generating a token.
