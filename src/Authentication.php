@@ -62,6 +62,7 @@ class Authentication implements AuthenticationInterface
         $authIdentifierField = $this->model::getAuthIdentifierField();
 
         try {
+            /** @var UserInterface $user */
             $user = $this->model::load_by(
                 $authIdentifierField,
                 $authIdentifier
