@@ -11,12 +11,12 @@ class UserFactory implements UserFactoryInterface
     /**
      * @var class-string<UserInterface>
      */
-    private $model;
+    protected $model;
 
     /**
      * @var UserRepositoryInterface
      */
-    private $userRepository;
+    protected $userRepository;
 
     /**
      * UserFactory constructor.
