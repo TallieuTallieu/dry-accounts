@@ -64,7 +64,8 @@ class AccountServiceProvider extends ServiceProvider
         $auth_class = $config->get(
             'accounts.auth_class',
             Authentication::class
-        )
+        );
+
         $app->set(AuthenticationInterface::class, $auth_class);
         $app->whenAsksGive($auth_class, 'model', $model);
     }
