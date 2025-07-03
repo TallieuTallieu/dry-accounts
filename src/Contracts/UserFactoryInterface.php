@@ -9,7 +9,7 @@ interface UserFactoryInterface
     /**
      * @param string $authIdentifier
      * @param string $password
-     * @param array $data Optional user data
+     * @param array $data
      * @return null|UserInterface
      */
     public function register(string $authIdentifier, string $password, array $data = []): ?UserInterface;

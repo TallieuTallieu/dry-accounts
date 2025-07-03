@@ -34,12 +34,14 @@ class UserFactory implements UserFactoryInterface
     /**
      * @param string $authIdentifier
      * @param string $password
+     * @param array $data // this implementation does nothing with this data
      * @return null|UserInterface
      * @throws \Exception
      */
     public function register(
         string $authIdentifier,
-        string $password
+        string $password,
+        array $data = []
     ): ?UserInterface {
         $existingUser = $this->userRepository->withAuthIdentifier(
             $authIdentifier
@@ -58,4 +60,3 @@ class UserFactory implements UserFactoryInterface
         return $newUser;
     }
 }
-

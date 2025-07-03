@@ -89,13 +89,15 @@ class Authentication implements AuthenticationInterface
      *
      * @param string $authIdentifier User's authentication identifier (email, username, etc.)
      * @param string $password User's password
+     * @param array $data This data is passed to the userfactory data param
      * @return UserInterface|null The created user instance or null if registration failed
      */
     public function register(
         string $authIdentifier,
-        string $password
+        string $password,
+        array $data = []
     ): ?UserInterface {
-        return $this->userFactory->register($authIdentifier, $password);
+        return $this->userFactory->register($authIdentifier, $password, $data);
     }
 
     /**
