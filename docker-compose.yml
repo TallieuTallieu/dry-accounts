@@ -4,7 +4,7 @@ networks:
 
 services:
   dry-accounts-dev:
-    build: https://github.com/TallieuTallieu/dry-docker.git
+    build: https://github.com/TallieuTallieu/dry-docker.git#php8.2
     hostname: docker_app
     volumes:
       - .:/var/www/html

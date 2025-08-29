@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d5b0f00fec750ed77faf8be334920eb8",
+    "content-hash": "b65667a3cba204c8050f75d60a1a23df",
     "packages": [
         {
             "name": "dragonmantank/cron-expression",
@@ -267,16 +267,16 @@
         },
         {
             "name": "phpoption/phpoption",
-            "version": "1.9.3",
+            "version": "1.9.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmittjoh/php-option.git",
-                "reference": "e3fac8b24f56113f7cb96af14958c0dd16330f54"
+                "reference": "638a154f8d4ee6a5cfa96d6a34dfbe0cffa9566d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/php-option/zipball/e3fac8b24f56113f7cb96af14958c0dd16330f54",
-                "reference": "e3fac8b24f56113f7cb96af14958c0dd16330f54",
+                "url": "https://api.github.com/repos/schmittjoh/php-option/zipball/638a154f8d4ee6a5cfa96d6a34dfbe0cffa9566d",
+                "reference": "638a154f8d4ee6a5cfa96d6a34dfbe0cffa9566d",
                 "shasum": ""
             },
             "require": {
@@ -284,7 +284,7 @@
             },
             "require-dev": {
                 "bamarni/composer-bin-plugin": "^1.8.2",
-                "phpunit/phpunit": "^8.5.39 || ^9.6.20 || ^10.5.28"
+                "phpunit/phpunit": "^8.5.44 || ^9.6.25 || ^10.5.53 || ^11.5.34"
             },
             "type": "library",
             "extra": {
@@ -326,7 +326,7 @@
             ],
             "support": {
                 "issues": "https://github.com/schmittjoh/php-option/issues",
-                "source": "https://github.com/schmittjoh/php-option/tree/1.9.3"
+                "source": "https://github.com/schmittjoh/php-option/tree/1.9.4"
             },
             "funding": [
                 {
@@ -338,7 +338,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-07-20T21:41:07+00:00"
+            "time": "2025-08-21T11:53:16+00:00"
         },
         {
             "name": "psr/http-factory",
@@ -563,7 +563,7 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.32.0",
+            "version": "v1.33.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
@@ -622,7 +622,7 @@
                 "portable"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.32.0"
+                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.33.0"
             },
             "funding": [
                 {
@@ -634,6 +634,10 @@
                     "type": "github"
                 },
                 {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
                     "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
                     "type": "tidelift"
                 }
@@ -642,20 +646,20 @@
         },
         {
             "name": "tallieutallieu/dry-dbi",
-            "version": "1.0.22",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/TallieuTallieu/dry-dbi.git",
-                "reference": "8e62b97410e59429923e7cde1de83ac9bfb79450"
+                "reference": "31e0ae4230d2c18481fc17e62026f8a8213a088e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/TallieuTallieu/dry-dbi/zipball/8e62b97410e59429923e7cde1de83ac9bfb79450",
-                "reference": "8e62b97410e59429923e7cde1de83ac9bfb79450",
+                "url": "https://api.github.com/repos/TallieuTallieu/dry-dbi/zipball/31e0ae4230d2c18481fc17e62026f8a8213a088e",
+                "reference": "31e0ae4230d2c18481fc17e62026f8a8213a088e",
                 "shasum": ""
             },
             "require": {
-                "tallieutallieu/oak": "^1.0 | ^1.1 | dev-php8.2"
+                "tallieutallieu/oak": "^3.0.2"
             },
             "type": "library",
             "autoload": {
@@ -664,35 +668,29 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "authors": [
-                {
-                    "name": "Dieter Vyncke",
-                    "email": "vynckedieter@gmail.com"
-                }
-            ],
             "description": "Improved DRY databases",
             "support": {
-                "source": "https://github.com/TallieuTallieu/dry-dbi/tree/1.0.22"
+                "source": "https://github.com/TallieuTallieu/dry-dbi/tree/3.0.0"
             },
-            "time": "2025-06-18T13:07:09+00:00"
+            "time": "2025-08-29T08:57:48+00:00"
         },
         {
             "name": "tallieutallieu/dry-external-api",
-            "version": "2.0.1",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/TallieuTallieu/dry-external-api.git",
-                "reference": "fd5a804f9834d4308bb34315de9b4a1d3bfa77cf"
+                "reference": "b5b6b0c6ace61330a90bc2db05f4c8bd2ed4a742"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/TallieuTallieu/dry-external-api/zipball/fd5a804f9834d4308bb34315de9b4a1d3bfa77cf",
-                "reference": "fd5a804f9834d4308bb34315de9b4a1d3bfa77cf",
+                "url": "https://api.github.com/repos/TallieuTallieu/dry-external-api/zipball/b5b6b0c6ace61330a90bc2db05f4c8bd2ed4a742",
+                "reference": "b5b6b0c6ace61330a90bc2db05f4c8bd2ed4a742",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "tallieutallieu/oak": "^1.0.0 | dev-php8.2"
+                "tallieutallieu/oak": "^3.0.2"
             },
             "type": "library",
             "autoload": {
@@ -701,12 +699,6 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "authors": [
-                {
-                    "name": "Dieter Vyncke",
-                    "email": "vynckedieter@gmail.com"
-                }
-            ],
             "description": "An external API for your DRY applications",
             "keywords": [
                 "api",
@@ -716,22 +708,22 @@
                 "restful"
             ],
             "support": {
-                "source": "https://github.com/TallieuTallieu/dry-external-api/tree/2.0.1"
+                "source": "https://github.com/TallieuTallieu/dry-external-api/tree/3.0.0"
             },
-            "time": "2025-05-15T11:53:17+00:00"
+            "time": "2025-08-29T09:02:19+00:00"
         },
         {
             "name": "tallieutallieu/oak",
-            "version": "1.1.12",
+            "version": "3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/TallieuTallieu/oak.git",
-                "reference": "54bbe35892220126a2ad6826327a124b6be39023"
+                "reference": "12b5343a7d107c6f7c5e59560be71f8d1a510adf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/TallieuTallieu/oak/zipball/54bbe35892220126a2ad6826327a124b6be39023",
-                "reference": "54bbe35892220126a2ad6826327a124b6be39023",
+                "url": "https://api.github.com/repos/TallieuTallieu/oak/zipball/12b5343a7d107c6f7c5e59560be71f8d1a510adf",
+                "reference": "12b5343a7d107c6f7c5e59560be71f8d1a510adf",
                 "shasum": ""
             },
             "require": {
@@ -764,9 +756,9 @@
                 "library"
             ],
             "support": {
-                "source": "https://github.com/TallieuTallieu/oak/tree/1.1.12"
+                "source": "https://github.com/TallieuTallieu/oak/tree/3.0.2"
             },
-            "time": "2025-06-24T12:19:21+00:00"
+            "time": "2025-07-03T13:09:59+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
