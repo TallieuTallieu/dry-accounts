@@ -45,7 +45,6 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      * Find a user by authentication credentials.
      *
      * Searches for a user with the given authentication identifier and password.
-     * Uses MD5 hashing with salt for password comparison (legacy support).
      *
      * @param string $authIdentifier The authentication identifier (e.g., email)
      * @param string $password The plain text password to verify

@@ -2,6 +2,7 @@
 
 namespace Tnt\Account;
 
+use dry\db\FetchException;
 use Oak\Dispatcher\Facade\Dispatcher;
 use Tnt\Account\Contracts\AuthenticationInterface;
 use Tnt\Account\Contracts\User\UserInterface;
