@@ -2,6 +2,8 @@
 
 namespace Tnt\Account\Traits\User;
 
+use Oak\Config\Facade\Config;
+
 /**
  * Trait providing default implementation for AuthenticatableInterface.
  */
@@ -43,7 +45,7 @@ trait AuthenticatableTrait
 
     /**
      * Set the user's password using secure hashing.
-     * 
+     *
      * Only hashes the password if it's not already hashed to prevent double hashing.
      *
      * @param string $password The new password to set
@@ -51,7 +53,15 @@ trait AuthenticatableTrait
      */
     public function setPassword(string $password): self
     {
-        // Check if password is already hashed (password_hash creates strings starting with $)
+        $useLegacyHash = Config::get('accounts.use_legacy_hash', false);
+
+        if ($useLegacyHash) {
+            $this->password_salt = \dry\util\string\random(10);
+            $this->password = md5($password . $this->password_salt);
+
+            return $this;
+        }
+
         if (!$this->isPasswordHashed($password)) {
             $this->password = password_hash($password, PASSWORD_BCRYPT);
         } else {
@@ -63,7 +73,7 @@ trait AuthenticatableTrait
 
     /**
      * Check if a password string is already hashed.
-     * 
+     *
      * @param string $password The password string to check
      * @return bool True if already hashed, false otherwise
      */
@@ -101,4 +111,3 @@ trait AuthenticatableTrait
         return 'password';
     }
 }
-
