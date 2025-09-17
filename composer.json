@@ -3,6 +3,7 @@
   "description": "Account system for DRY applications",
   "type": "library",
   "require": {
+    "tallieutallieu/dry": "^v3.3.0-beta.18",
     "tallieutallieu/oak": "^3.0.2",
     "tallieutallieu/dry-dbi": "^3.0.0",
     "tallieutallieu/dry-external-api": "^3.0.0",
@@ -12,5 +13,11 @@
     "psr-4": {
       "Tnt\\Account\\": "src/"
     }
-  }
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "git@bitbucket.org:tallieu/dry3.git"
+    }
+  ]
 }

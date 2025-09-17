@@ -2,6 +2,7 @@
 
 namespace Tnt\Account\Traits\User;
 
+use dry\util\Str;
 use Oak\Config\Facade\Config;
 
 /**
@@ -56,7 +57,7 @@ trait AuthenticatableTrait
         $useLegacyHash = Config::get('accounts.use_legacy_hash', false);
 
         if ($useLegacyHash) {
-            $this->password_salt = \dry\util\string\random(10);
+            $this->password_salt = Str::random(10);
             $this->password = md5($password . $this->password_salt);
 
             return $this;
