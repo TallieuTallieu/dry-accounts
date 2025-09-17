@@ -3,6 +3,7 @@
 namespace Tnt\Account;
 
 use dry\db\FetchException;
+use Oak\Config\Facade\Config;
 use Tnt\Account\Contracts\User\UserInterface;
 use Tnt\Account\Contracts\UserRepositoryInterface;
 use Tnt\Dbi\BaseRepository;
@@ -10,6 +11,7 @@ use Tnt\Dbi\Contracts\CriteriaCollectionInterface;
 use Tnt\Dbi\Criteria\Equals;
 use Tnt\Dbi\Criteria\GreaterThan;
 use Tnt\Dbi\Criteria\IsTrue;
+use Tnt\Dbi\Raw;
 
 /**
  * Repository for managing user data operations.
@@ -61,6 +63,25 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                     $authIdentifier
                 )
             );
+
+            $useLegacyHash = Config::get('accounts.use_legacy_hash', false);
+
+            if ($useLegacyHash) {
+                try {
+                    $this->addCriteria(
+                        new Equals(
+                            new Raw('MD5( CONCAT( ?, password_salt ) )', [
+                                $password,
+                            ]),
+                            new Raw('password')
+                        )
+                    );
+
+                    return $this->first();
+                } catch (FetchException $e) {
+                    return null;
+                }
+            }
 
             $user = $this->first();
 
@@ -123,9 +144,8 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      * @param string $refreshToken The refresh token to search for
      * @return UserInterface|null The user if found with valid token, null otherwise
      */
-    public function withValidRefreshToken(
-        string $refreshToken
-    ): ?UserInterface {
+    public function withValidRefreshToken(string $refreshToken): ?UserInterface
+    {
         try {
             $this->addCriteria(new Equals('refresh_token', $refreshToken));
             $this->addCriteria(
