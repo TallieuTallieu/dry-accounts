@@ -7,13 +7,14 @@ use dry\orm\special\Boolean;
 use Oak\Dispatcher\Facade\Dispatcher;
 use Tnt\Account\Contracts\User\UserInterface;
 use Tnt\Account\Events\Created;
-use Tnt\Account\Traits\User\AuthenticatableTrait;
 use Tnt\Account\Traits\User\ActivatableTrait;
+use Tnt\Account\Traits\User\AuthenticatableTrait;
+use Tnt\Account\Traits\User\RefreshableTrait;
 use Tnt\Account\Traits\User\ResetableTrait;
 
 /**
  * User model class representing an account user.
- * 
+ *
  * @property int $id User unique identifier
  * @property string $email User email address
  * @property string $password Hashed password
@@ -23,10 +24,12 @@ use Tnt\Account\Traits\User\ResetableTrait;
  * @property bool $is_activated Whether the user account is activated
  * @property int $created Timestamp when user was created
  * @property int $updated Timestamp when user was last updated
+ * @property string|null $refresh_token JWT refresh token
+ * @property int|null $refresh_token_expiry_time Refresh token expiry timestamp
  */
 class User extends Model implements UserInterface
 {
-    use AuthenticatableTrait, ActivatableTrait, ResetableTrait;
+    use ActivatableTrait, AuthenticatableTrait, RefreshableTrait, ResetableTrait;
 
     const TABLE = 'account_user';
 

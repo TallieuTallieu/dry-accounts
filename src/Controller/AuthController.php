@@ -2,10 +2,10 @@
 
 namespace Tnt\Account\Controller;
 
-use function dry\util\string\random;
-use Lindelius\JWT\Exception\ExpiredJwtException;
+use Firebase\JWT\ExpiredException;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Oak\Contracts\Config\RepositoryInterface;
-use Tnt\Account\Contracts\User\AuthenticatableInterface;
 use Tnt\Account\Contracts\User\UserInterface;
 use Tnt\Account\Contracts\AuthenticationInterface;
 use Tnt\Account\Contracts\UserRepositoryInterface;
@@ -46,7 +46,7 @@ class AuthController
         $this->authentication = $authentication;
         $this->config = $config;
 
-        $this->secret = $config->get('accounts.jwt_secret', '');
+        $this->secret = $config->get('accounts.jwt_secret') ?? '';
     }
 
     /**
@@ -81,11 +81,12 @@ class AuthController
         }
 
         try {
+            $decodedJwt = JWT::decode(
+                $request->getHeader('AUTHORIZATION'),
+                new Key($this->secret, 'HS256')
+            );
 
-            $decodedJwt = \Lindelius\JWT\StandardJWT::decode($request->getHeader('AUTHORIZATION'));
-            $decodedJwt->verify($this->secret);
-
-            $user = $this->userRepository->withIdentifier($decodedJwt->getClaim('sub'));
+            $user = $this->userRepository->withIdentifier($decodedJwt->sub);
 
             if (! $user) {
                 throw new ApiException('invalid_user');
@@ -93,10 +94,10 @@ class AuthController
 
             return $user;
         }
-        catch (ExpiredJwtException $e) {
+        catch (ExpiredException $e) {
             throw new ApiException('expired_jwt', $e->getMessage());
         }
-        catch (\Lindelius\JWT\Exception\Exception $e) {
+        catch (\Exception $e) {
             throw new ApiException('invalid_jwt', $e->getMessage());
         }
     }
@@ -125,24 +126,27 @@ class AuthController
     private function createToken(UserInterface $user): array
     {
         try {
+            $now = time();
+            $expiryTime = (int) ($this->config->get('accounts.token_expiry_time') ?? 3600);
+            $refreshExpiryTime = (int) ($this->config->get('accounts.refresh_token_expiry_time') ?? 7200);
 
-            $jwt = new \Lindelius\JWT\StandardJWT();
-            $jwt->exp = time() + $this->config->get('accounts.token_expiry_time', (60*60));
-            $jwt->iat = time();
-            $jwt->sub = $user->getIdentifier();
+            $payload = [
+                'exp' => $now + $expiryTime,
+                'iat' => $now,
+                'sub' => $user->getIdentifier(),
+            ];
 
-            $user->refresh_token = random(16);
-            $user->refresh_token_expiry_time = time() + $this->config->get('accounts.refresh_token_expiry_time', (60*60*2));
+            $user->setRefreshToken(bin2hex(random_bytes(16)));
+            $user->setRefreshTokenExpiryTime($now + $refreshExpiryTime);
             $user->save();
 
             return [
-                'access_token' => $jwt->encode($this->secret),
-                'refresh_token' => $user->refresh_token,
-                'expires_at' => $user->refresh_token_expiry_time,
+                'access_token' => JWT::encode($payload, $this->secret, 'HS256'),
+                'refresh_token' => $user->getRefreshToken(),
+                'expires_at' => $user->getRefreshTokenExpiryTime(),
             ];
-
         }
-        catch (\Lindelius\JWT\Exception\Exception $e) {
+        catch (\Exception $e) {
             throw new ApiException('invalid_jwt', $e->getMessage());
         }
     }
