@@ -6,8 +6,8 @@ use dry\db\FetchException;
 use Oak\Config\Facade\Config;
 use Tnt\Account\Contracts\User\UserInterface;
 use Tnt\Account\Contracts\UserRepositoryInterface;
+use Tnt\Account\Model\User;
 use Tnt\Dbi\BaseRepository;
-use Tnt\Dbi\Contracts\CriteriaCollectionInterface;
 use Tnt\Dbi\Criteria\Equals;
 use Tnt\Dbi\Criteria\GreaterThan;
 use Tnt\Dbi\Criteria\IsTrue;
@@ -18,29 +18,22 @@ use Tnt\Dbi\Raw;
  *
  * Provides methods for querying users based on various criteria such as
  * authentication credentials, identifiers, tokens, and activation status.
- *
- * @property class-string<UserInterface> $model
  */
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
     /**
-     * @var class-string<UserInterface> The fully qualified class name of the user model
+     * The fully qualified class name of the user model.
      */
-    protected string $model;
+    protected string $model = User::class;
 
     /**
-     * UserRepository constructor.
+     * Set the user model class.
      *
      * @param class-string<UserInterface> $model The fully qualified class name of the user model
-     * @param CriteriaCollectionInterface $criteria The criteria collection for query building
      */
-    public function __construct(
-        string $model,
-        CriteriaCollectionInterface $criteria
-    ) {
+    public function setModel(string $model): void
+    {
         $this->model = $model;
-
-        parent::__construct($criteria);
     }
 
     /**
@@ -68,14 +61,13 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
             if ($useLegacyHash) {
                 try {
-                    $this->addCriteria(
-                        new Equals(
-                            new Raw('MD5( CONCAT( ?, password_salt ) )', [
-                                $password,
-                            ]),
+                    $this->useQueryBuilder(function ($qb) use ($password) {
+                        $qb->where(
+                            new Raw('MD5( CONCAT( ?, password_salt ) )', [$password]),
+                            '=',
                             new Raw('password')
-                        )
-                    );
+                        );
+                    });
 
                     return $this->first();
                 } catch (FetchException $e) {
