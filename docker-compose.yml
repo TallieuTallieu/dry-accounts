@@ -11,4 +11,4 @@ services:
       - ~/.ssh:/root/.ssh:ro
     ports:
       - "80"
-    command: ["sh", "-c", "eval `ssh-agent -s` && ssh-add && composer install && apache2ctl -D FOREGROUND"]
+    command: ["sh", "-c", "eval `ssh-agent -s` && ssh-add && apache2ctl -D FOREGROUND"]

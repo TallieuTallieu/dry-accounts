@@ -5,7 +5,8 @@ namespace Tnt\Account\Controller;
 use function dry\util\string\random;
 use Lindelius\JWT\Exception\ExpiredJwtException;
 use Oak\Contracts\Config\RepositoryInterface;
-use Tnt\Account\Contracts\AuthenticatableInterface;
+use Tnt\Account\Contracts\User\AuthenticatableInterface;
+use Tnt\Account\Contracts\User\UserInterface;
 use Tnt\Account\Contracts\AuthenticationInterface;
 use Tnt\Account\Contracts\UserRepositoryInterface;
 use Tnt\ExternalApi\Exception\ApiException;
@@ -28,10 +29,10 @@ class AuthController
      */
     private $config;
 
-    /**,
-     * @var string secret
+    /**
+     * @var string JWT secret key
      */
-    private $secret;
+    private string $secret;
 
     /**
      * AuthController constructor.
@@ -48,7 +49,12 @@ class AuthController
         $this->secret = $config->get('accounts.jwt_secret', '');
     }
 
-    public function authenticate(Request $request)
+    /**
+     * @param Request $request
+     * @return array{access_token: string, refresh_token: string, expires_at: int}
+     * @throws ApiException
+     */
+    public function authenticate(Request $request): array
     {
         if (! $request->getHeader('USER') || ! $request->getHeader('PASSWORD')) {
             throw new ApiException('auth_failed');
@@ -65,10 +71,10 @@ class AuthController
 
     /**
      * @param Request $request
-     * @return null|\Tnt\Account\Contracts\AuthenticatableInterface
+     * @return UserInterface
      * @throws ApiException
      */
-    public function authorize(Request $request)
+    public function authorize(Request $request): UserInterface
     {
         if (! $request->getHeader('AUTHORIZATION')) {
             throw new ApiException('authorize_failed');
@@ -97,10 +103,10 @@ class AuthController
 
     /**
      * @param Request $request
-     * @return array
+     * @return array{access_token: string, refresh_token: string, expires_at: int}
      * @throws ApiException
      */
-    public function refreshToken(Request $request)
+    public function refreshToken(Request $request): array
     {
         $user = $this->userRepository->withValidRefreshToken($request->data->json('refresh_token'));
 
@@ -112,11 +118,11 @@ class AuthController
     }
 
     /**
-     * @param AuthenticatableInterface $user
-     * @return array
+     * @param UserInterface $user
+     * @return array{access_token: string, refresh_token: string, expires_at: int}
      * @throws ApiException
      */
-    private function createToken(AuthenticatableInterface $user): array
+    private function createToken(UserInterface $user): array
     {
         try {
 

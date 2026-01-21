@@ -13,10 +13,10 @@ interface AuthenticationInterface
 {
     /**
      * Register a new user with the provided credentials.
-     * 
+     *
      * @param string $authIdentifier User's authentication identifier (email, username, etc.)
      * @param string $password User's password
-     * @param array $data Additional user data
+     * @param array<string, mixed> $data Additional user data
      * @return UserInterface|null The created user instance or null if registration failed
      */
     public function register(

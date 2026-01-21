@@ -34,7 +34,7 @@ class UserFactory implements UserFactoryInterface
     /**
      * @param string $authIdentifier
      * @param string $password
-     * @param array $data // this implementation does nothing with this data
+     * @param array<string, mixed> $data // this implementation does nothing with this data
      * @return null|UserInterface
      * @throws \Exception
      */

@@ -13,10 +13,10 @@ interface ActivatableInterface
 
   /**
    * Get the activation status of the user.
-   * 
-   * @return string The activation status
+   *
+   * @return bool The activation status
    */
-  public function isActivated(): string;
+  public function isActivated(): bool;
 
   /**
    * Prepare the user for activation by generating a token.

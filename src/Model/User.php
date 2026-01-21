@@ -18,7 +18,7 @@ use Tnt\Account\Traits\User\ResetableTrait;
  * @property string $email User email address
  * @property string $password Hashed password
  * @property string $password_salt Password salt for hashing
- * @property string $temp_token Temporary activation token
+ * @property string|null $temp_token Temporary activation token
  * @property string $reset_token Password reset token
  * @property bool $is_activated Whether the user account is activated
  * @property int $created Timestamp when user was created
@@ -34,7 +34,7 @@ class User extends Model implements UserInterface
         'is_activated' => Boolean::class,
     ];
 
-    public function save()
+    public function save(): void
     {
         if (!$this->id) {
             $this->created = time();
