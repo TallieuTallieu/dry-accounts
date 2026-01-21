@@ -42,7 +42,7 @@ class CreateUserTable implements RevisionInterface
      */
     public function up(): void
     {
-        $modelClass = $this->config->get('accounts.model', User::class);
+        $modelClass = $this->config->get('accounts.model') ?? User::class;
 
         $this->queryBuilder
             ->table('account_user')
