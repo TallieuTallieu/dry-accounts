@@ -54,12 +54,15 @@ class AccountServiceProvider extends ServiceProvider
         $app->set(UserFactoryInterface::class, $factory);
         $app->whenAsksGive($factory, 'model', $model);
 
-        $repository = $config->get(
+        $repositoryClass = $config->get(
             'accounts.repository',
             UserRepository::class
         );
-        $app->set(UserRepositoryInterface::class, $repository);
-        $app->whenAsksGive($repository, 'model', $model);
+        $app->set(UserRepositoryInterface::class, function ($app) use ($repositoryClass, $model) {
+            $repository = $app->get($repositoryClass);
+            $repository->setModel($model);
+            return $repository;
+        });
 
         $auth_class = $config->get(
             'accounts.auth_class',
@@ -67,7 +70,6 @@ class AccountServiceProvider extends ServiceProvider
         );
 
         $app->set(AuthenticationInterface::class, $auth_class);
-        $app->whenAsksGive($auth_class, 'model', $model);
     }
 }
 

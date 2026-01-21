@@ -11,6 +11,16 @@ use Oak\Config\Facade\Config;
 trait AuthenticatableTrait
 {
     /**
+     * Override this property to use a custom auth identifier field.
+     */
+    protected static string $authIdentifierField = '';
+
+    /**
+     * Override this property to use a custom password field.
+     */
+    protected static string $passwordField = '';
+
+    /**
      * Get the unique identifier for the user.
      *
      * @return int The user's unique identifier

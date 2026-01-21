@@ -8,6 +8,11 @@ namespace Tnt\Account\Traits\User;
 trait ResetableTrait
 {
     /**
+     * Override this property to use a custom reset_token field.
+     */
+    protected static string $resetTokenName = '';
+
+    /**
      * Get the password reset token for the user.
      *
      * @return string|null The reset token, or null if not set
