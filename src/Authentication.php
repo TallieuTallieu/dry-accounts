@@ -2,7 +2,6 @@
 
 namespace Tnt\Account;
 
-use dry\db\FetchException;
 use Oak\Dispatcher\Facade\Dispatcher;
 use Tnt\Account\Contracts\AuthenticationInterface;
 use Tnt\Account\Contracts\User\UserInterface;
@@ -19,11 +18,6 @@ use Tnt\Account\Events\ResetPassword;
  */
 class Authentication implements AuthenticationInterface
 {
-    /**
-     * @var class-string<UserInterface>
-     */
-    private $model;
-
     /**
      * @var UserStorageInterface $userStorage
      */
@@ -45,15 +39,12 @@ class Authentication implements AuthenticationInterface
      * @param UserStorageInterface $userStorage User storage implementation
      * @param UserRepositoryInterface $userRepository User repository for data access
      * @param UserFactoryInterface $userFactory Factory for creating users
-     * @param class-string<UserInterface> $model User model class name
      */
     public function __construct(
         UserStorageInterface $userStorage,
         UserRepositoryInterface $userRepository,
-        UserFactoryInterface $userFactory,
-        string $model
+        UserFactoryInterface $userFactory
     ) {
-        $this->model = $model;
         $this->userStorage = $userStorage;
         $this->userRepository = $userRepository;
         $this->userFactory = $userFactory;
@@ -67,21 +58,17 @@ class Authentication implements AuthenticationInterface
      */
     public function resetPassword(string $authIdentifier): bool
     {
-        $authIdentifierField = $this->model::getAuthIdentifierField();
+        $user = $this->userRepository->withAuthIdentifier($authIdentifier);
 
-        try {
-            $user = $this->model::load_by(
-                $authIdentifierField,
-                $authIdentifier
-            );
-            $user->setResetToken();
-            $user->save();
-
-            Dispatcher::dispatch(ResetPassword::class, new ResetPassword($user));
-            return true;
-        } catch (FetchException $exception) {
+        if ($user === null) {
             return false;
         }
+
+        $user->setResetToken();
+        $user->save();
+
+        Dispatcher::dispatch(ResetPassword::class, new ResetPassword($user));
+        return true;
     }
 
     /**
