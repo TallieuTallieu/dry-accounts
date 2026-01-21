@@ -11,6 +11,16 @@ use Tnt\Account\Events\Activated;
 trait ActivatableTrait
 {
     /**
+     * Override this property to use a custom is_activated field.
+     */
+    protected static string $isActivatedField = '';
+
+    /**
+     * Override this property to use a custom temp_token field.
+     */
+    protected static string $tempTokenField = '';
+
+    /**
      * Get the activation token for the user.
      *
      * @return string The activation token
