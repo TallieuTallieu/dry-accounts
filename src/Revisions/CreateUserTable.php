@@ -37,8 +37,10 @@ class CreateUserTable implements RevisionInterface
 
     /**
      * Create the user table with dynamic fields based on configured model interfaces.
+     *
+     * @return void
      */
-    public function up()
+    public function up(): void
     {
         $modelClass = $this->config->get('accounts.model', User::class);
 
@@ -106,9 +108,11 @@ class CreateUserTable implements RevisionInterface
     }
 
     /**
+     * Drop the user table.
      *
+     * @return void
      */
-    public function down()
+    public function down(): void
     {
         $this->queryBuilder->table('account_user')->drop();
 

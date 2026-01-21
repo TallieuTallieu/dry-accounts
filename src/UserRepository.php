@@ -26,7 +26,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     /**
      * @var class-string<UserInterface> The fully qualified class name of the user model
      */
-    protected $model;
+    protected string $model;
 
     /**
      * UserRepository constructor.

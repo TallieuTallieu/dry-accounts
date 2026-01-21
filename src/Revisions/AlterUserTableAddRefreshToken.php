@@ -24,9 +24,11 @@ class AlterUserTableAddRefreshToken implements RevisionInterface
     }
 
     /**
+     * Add refresh token columns to the user table.
      *
+     * @return void
      */
-    public function up()
+    public function up(): void
     {
         $this->queryBuilder->table('account_user')->alter(function (TableBuilder $table) {
 
@@ -40,9 +42,11 @@ class AlterUserTableAddRefreshToken implements RevisionInterface
     }
 
     /**
+     * Remove refresh token columns from the user table.
      *
+     * @return void
      */
-    public function down()
+    public function down(): void
     {
         $this->queryBuilder->table('account_user')->alter(function (TableBuilder $table) {
 

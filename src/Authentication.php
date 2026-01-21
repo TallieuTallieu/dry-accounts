@@ -45,7 +45,7 @@ class Authentication implements AuthenticationInterface
      * @param UserStorageInterface $userStorage User storage implementation
      * @param UserRepositoryInterface $userRepository User repository for data access
      * @param UserFactoryInterface $userFactory Factory for creating users
-     * @param string $model User model class name
+     * @param class-string<UserInterface> $model User model class name
      */
     public function __construct(
         UserStorageInterface $userStorage,
@@ -70,7 +70,6 @@ class Authentication implements AuthenticationInterface
         $authIdentifierField = $this->model::getAuthIdentifierField();
 
         try {
-            /** @var UserInterface $user */
             $user = $this->model::load_by(
                 $authIdentifierField,
                 $authIdentifier
@@ -90,7 +89,7 @@ class Authentication implements AuthenticationInterface
      *
      * @param string $authIdentifier User's authentication identifier (email, username, etc.)
      * @param string $password User's password
-     * @param array $data This data is passed to the userfactory data param
+     * @param array<string, mixed> $data This data is passed to the userfactory data param
      * @return UserInterface|null The created user instance or null if registration failed
      */
     public function register(

@@ -1,0 +1,15 @@
+parameters:
+    level: 6
+    paths:
+        - src
+    
+    # Strict rules for maximum type safety
+    checkMissingCallableSignature: true
+    checkUninitializedProperties: true
+    checkTooWideReturnTypesInProtectedAndPublicMethods: true
+    checkBenevolentUnionTypes: true
+    
+    # Additional strict checks
+    reportMaybesInMethodSignatures: true
+    reportStaticMethodSignatures: true
+    reportMaybesInPropertyPhpDocTypes: true

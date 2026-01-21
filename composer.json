@@ -3,14 +3,22 @@
   "description": "Account system for DRY applications",
   "type": "library",
   "require": {
-    "tallieutallieu/oak": "^1.1.12",
-    "tallieutallieu/dry-dbi": "^1.0.22",
-    "tallieutallieu/dry-external-api": "^2.0.1",
-    "lindelius/php-jwt": "^0.9.1"
+    "tallieutallieu/dry": "^v3.8.0-beta.14",
+    "tallieutallieu/oak": "^3.0.2",
+    "tallieutallieu/dry-dbi": "^3.8.0",
+    "tallieutallieu/dry-external-api": "^3.0.0",
+    "lindelius/php-jwt": "^0.9.1",
+    "phpstan/phpstan": "^2.0"
   },
   "autoload": {
     "psr-4": {
       "Tnt\\Account\\": "src/"
     }
-  }
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "git@bitbucket.org:tallieu/dry3.git"
+    }
+  ]
 }

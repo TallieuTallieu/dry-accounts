@@ -37,3 +37,7 @@ docker-exec: docker
 	docker compose exec dry-accounts-dev bash
 .PHONY: docker-exec
 
+phpstan: docker
+	docker compose exec dry-accounts-dev vendor/bin/phpstan analyse
+.PHONY: phpstan
+
