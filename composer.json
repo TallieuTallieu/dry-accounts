@@ -3,11 +3,11 @@
   "description": "Account system for DRY applications",
   "type": "library",
   "require": {
-    "tallieutallieu/dry": "^v3.8.0-beta.14",
+    "tallieutallieu/dry": "^v3.8.1-beta.5",
     "tallieutallieu/oak": "^3.0.2",
     "tallieutallieu/dry-dbi": "^3.8.0",
     "tallieutallieu/dry-external-api": "^3.0.1",
-    "firebase/php-jwt": "^6.0",
+    "firebase/php-jwt": "^7.0.3",
     "phpstan/phpstan": "^2.1"
   },
   "autoload": {
