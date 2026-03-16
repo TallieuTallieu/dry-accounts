@@ -5,6 +5,7 @@ namespace Tnt\Account\Controller;
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use dry\Debug;
 use Oak\Contracts\Config\RepositoryInterface;
 use Tnt\Account\Contracts\User\UserInterface;
 use Tnt\Account\Contracts\AuthenticationInterface;
@@ -47,6 +48,10 @@ class AuthController
         $this->config = $config;
 
         $this->secret = $config->get('accounts.jwt_secret') ?? '';
+
+        if (strlen($this->secret) < 32) {
+            Debug::log('JWT secret is missing or too short (minimum 32 bytes required for HS256)', []);
+        }
     }
 
     /**
