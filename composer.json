@@ -3,8 +3,9 @@
   "description": "Account system for DRY applications",
   "type": "library",
   "require": {
+    "php": "^8.4",
     "tallieutallieu/dry": "^v3.8.1-beta.5|^4.0.0",
-    "tallieutallieu/oak": "^3.0.2",
+    "tallieutallieu/oak": "^3.0.2 || ^4.0",
     "tallieutallieu/dry-dbi": "^3.8.0",
     "tallieutallieu/dry-external-api": "^3.0.1",
     "firebase/php-jwt": "^7.0.3",
