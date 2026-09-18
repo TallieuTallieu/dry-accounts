@@ -35,6 +35,27 @@ interface ActivatableInterface
   public function activate(bool $save = true): self;
 
   /**
+   * Check if the activation token is set and has not expired.
+   * 
+   * @return bool True if a usable activation token exists, false otherwise
+   */
+  public function isTempTokenValid(): bool;
+
+  /**
+   * Get the timestamp at which the activation token was minted.
+   * 
+   * @return int|null The unix timestamp, or null if unknown
+   */
+  public function getTempTokenCreated(): ?int;
+
+  /**
+   * Get the number of seconds an activation token stays usable.
+   * 
+   * @return int
+   */
+  public static function getActivationTokenTtl(): int;
+
+  /**
    * Get the is_activated field name
    * 
    * @return string
@@ -47,5 +68,12 @@ interface ActivatableInterface
    * @return string
    */
   public static function getTempTokenField(): string;
+
+  /**
+   * Get the temp_token_created field name
+   * 
+   * @return string
+   */
+  public static function getTempTokenCreatedField(): string;
 }
 

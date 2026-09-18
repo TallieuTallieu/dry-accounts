@@ -151,6 +151,70 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     }
 
     /**
+     * Find a user by valid password reset token.
+     *
+     * Rejects a token older than accounts.reset_token_ttl, and a token minted
+     * before the reset_token_created column existed.
+     *
+     * @param string $token The reset token to search for
+     * @return UserInterface|null The user if found with a non-expired token, null otherwise
+     */
+    public function withValidResetToken(string $token): ?UserInterface
+    {
+        if ($token === '') {
+            return null;
+        }
+
+        try {
+            $this->addCriteria(
+                new Equals($this->model::getResetTokenField(), $token)
+            );
+            $this->addCriteria(
+                new GreaterThan(
+                    $this->model::getResetTokenCreatedField(),
+                    time() - $this->model::getResetTokenTtl()
+                )
+            );
+
+            return $this->first();
+        } catch (FetchException $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Find a user by valid activation token.
+     *
+     * Rejects a token older than accounts.activation_token_ttl, and a token
+     * minted before the temp_token_created column existed.
+     *
+     * @param string $token The activation token to search for
+     * @return UserInterface|null The user if found with a non-expired token, null otherwise
+     */
+    public function withValidTempToken(string $token): ?UserInterface
+    {
+        if ($token === '') {
+            return null;
+        }
+
+        try {
+            $this->addCriteria(
+                new Equals($this->model::getTempTokenField(), $token)
+            );
+            $this->addCriteria(
+                new GreaterThan(
+                    $this->model::getTempTokenCreatedField(),
+                    time() - $this->model::getActivationTokenTtl()
+                )
+            );
+
+            return $this->first();
+        } catch (FetchException $e) {
+            return null;
+        }
+    }
+
+    /**
      * Find an activated user by their authentication identifier.
      *
      * Searches for a user with the given authentication identifier who has

@@ -15,6 +15,28 @@ model               | dry\orm\Model                 | Tnt\Account\Model\User
 storage             | UserStorageInterface          | SessionUserStorage
 factory             | UserFactoryInterface          | UserFactory
 repository          | UserRepositoryInterface       | UserRepository
+use_legacy_hash     | bool                          | false
+reset_token_ttl     | int (seconds)                 | 3600 (1 hour)
+activation_token_ttl| int (seconds)                 | 604800 (7 days)
+
+##### Reset and activation tokens
+
+Both tokens are minted with `random_bytes(32)` and stamped with the time they
+were created (`reset_token_created` / `temp_token_created`). Check a token's age
+before acting on it:
+
+```php
+// on the model
+$user->isResetTokenValid();
+$user->isTempTokenValid();
+
+// or look the user up by a token that has not expired
+$userRepository->withValidResetToken($token);
+$userRepository->withValidTempToken($token);
+```
+
+Tokens minted before these columns existed have no recorded age and are treated
+as expired, so outstanding links from before the migration stop working.
 
 #### Basic example usage
 

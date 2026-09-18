@@ -90,9 +90,10 @@ trait AuthenticatableTrait
      */
     private function isPasswordHashed(string $password): bool
     {
-        // password_hash() creates strings that start with $ and have specific patterns
-        // This is a reasonable heuristic to detect already hashed passwords
-        return strlen($password) >= 60 && strpos($password, '$') === 0;
+        // Only a string PHP recognises as one of its own hashes reports an algo.
+        // A length/prefix heuristic would misread a long passphrase as a hash and
+        // store it verbatim.
+        return password_get_info($password)['algo'] !== null;
     }
 
     /**
