@@ -90,9 +90,7 @@ trait AuthenticatableTrait
      */
     private function isPasswordHashed(string $password): bool
     {
-        // Only a string PHP recognises as one of its own hashes reports an algo.
-        // A length/prefix heuristic would misread a long passphrase as a hash and
-        // store it verbatim.
+        // A length/prefix check would mistake a long passphrase for a hash.
         return password_get_info($password)['algo'] !== null;
     }
 

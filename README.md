@@ -5,19 +5,25 @@ Account system for DRY applications
 ```ssh
 composer require tallieutallieu/dry-accounts
 
-php oak migration migrate -m accounts
+php oak migration migrate -m account
 ```
 
 ##### Config options
-Name                | Type                          | Default
-------------------- | ------------------------------|--------------------------
-model               | dry\orm\Model                 | Tnt\Account\Model\User
-storage             | UserStorageInterface          | SessionUserStorage
-factory             | UserFactoryInterface          | UserFactory
-repository          | UserRepositoryInterface       | UserRepository
-use_legacy_hash     | bool                          | false
-reset_token_ttl     | int (seconds)                 | 3600 (1 hour)
-activation_token_ttl| int (seconds)                 | 604800 (7 days)
+All keys live under `accounts.`.
+
+Name                      | Type                    | Default
+------------------------- | ------------------------| --------------------------
+model                     | dry\orm\Model           | Tnt\Account\Model\User
+storage                   | UserStorageInterface    | SessionUserStorage
+factory                   | UserFactoryInterface    | UserFactory
+repository                | UserRepositoryInterface | UserRepository
+auth_class                | AuthenticationInterface | Authentication
+use_legacy_hash           | bool                    | false
+reset_token_ttl           | int (seconds)           | 3600 (1 hour)
+activation_token_ttl      | int (seconds)           | 604800 (7 days)
+jwt_secret                | string (min. 32 bytes)  | —
+token_expiry_time         | int (seconds)           | 3600
+refresh_token_expiry_time | int (seconds)           | 7200
 
 ##### Reset and activation tokens
 

@@ -122,35 +122,14 @@ class AlterUserTableAddTokenTimestamps implements RevisionInterface
     {
         $columns = [];
 
-        if ($this->implementsInterface($modelClass, ResetableInterface::class)) {
+        if (is_a($modelClass, ResetableInterface::class, true)) {
             $columns[] = $modelClass::getResetTokenCreatedField();
         }
 
-        if (
-            $this->implementsInterface($modelClass, ActivatableInterface::class)
-        ) {
+        if (is_a($modelClass, ActivatableInterface::class, true)) {
             $columns[] = $modelClass::getTempTokenCreatedField();
         }
 
         return $columns;
-    }
-
-    /**
-     * Check if a class implements a specific interface.
-     *
-     * @param string $className The class name to check
-     * @param string $interfaceName The interface name to check for
-     * @return bool True if the class implements the interface, false otherwise
-     */
-    private function implementsInterface(
-        string $className,
-        string $interfaceName
-    ): bool {
-        if (!class_exists($className)) {
-            return false;
-        }
-
-        $reflectionClass = new \ReflectionClass($className);
-        return $reflectionClass->implementsInterface($interfaceName);
     }
 }

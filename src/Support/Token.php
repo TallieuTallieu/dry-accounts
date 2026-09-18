@@ -9,17 +9,13 @@ namespace Tnt\Account\Support;
 class Token
 {
     /**
-     * Generate a cryptographically secure token.
+     * Generate a cryptographically secure 64-character hex token.
      *
-     * uniqid() is the current time in microseconds plus lcg_value(), which is
-     * largely predictable from a known timestamp, so it must not be used here.
-     *
-     * @param int $bytes Number of random bytes; the token is twice as long in hex
-     * @return string A hex token of $bytes * 2 characters
+     * @return string
      * @throws \Exception If no source of randomness is available
      */
-    public static function generate(int $bytes = 32): string
+    public static function generate(): string
     {
-        return bin2hex(random_bytes($bytes));
+        return bin2hex(random_bytes(32));
     }
 }

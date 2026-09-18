@@ -38,8 +38,7 @@ trait ResetableTrait
      */
     public function setResetToken(?string $token = ''): self
     {
-        // Only the empty-string default generates a token. null must fall
-        // through, otherwise the documented way to clear the token mints one.
+        // null must fall through: it clears the token.
         $token = $token === '' ? Token::generate() : $token;
 
         $this->{static::getResetTokenField()} = $token;
