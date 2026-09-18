@@ -14,6 +14,7 @@ use Tnt\Account\Contracts\UserStorageInterface;
 use Tnt\Account\Controller\AuthController;
 use Tnt\Account\Model\User;
 use Tnt\Account\Revisions\AlterUserTableAddRefreshToken;
+use Tnt\Account\Revisions\AlterUserTableAddTokenTimestamps;
 use Tnt\Account\Revisions\CreateUserTable;
 use Tnt\ExternalApi\Facade\Api;
 
@@ -33,6 +34,7 @@ class AccountServiceProvider extends ServiceProvider
             $migrator->setRevisions([
                 CreateUserTable::class,
                 AlterUserTableAddRefreshToken::class,
+                AlterUserTableAddTokenTimestamps::class,
             ]);
 
             $app->get(MigrationManager::class)->addMigrator($migrator);

@@ -26,16 +26,22 @@ make phpstan         # Run PHPStan static analysis (level 6)
 - `Auth` (Facade) - Static facade for accessing authentication methods
 
 **User System:**
-- `UserInterface` - Combines `AuthenticatableInterface`, `ActivatableInterface`, and `ResetableInterface`
+- `UserInterface` - Combines `AuthenticatableInterface`, `ActivatableInterface`, `ResetableInterface`, and `RefreshableInterface`
 - `User` (Model) - Default user model extending dry ORM with traits for each capability
 - `UserRepository` - Data access layer for user queries (by credentials, identifier, tokens)
 - `UserFactory` - Creates new user instances during registration
 - `SessionUserStorage` - Stores authenticated user in PHP session
+- `Support\Token` - Generates reset and activation tokens (`random_bytes`, never `uniqid()`)
 
 **Traits (composable user capabilities):**
 - `AuthenticatableTrait` - Password hashing/verification, auth identifier field
 - `ActivatableTrait` - Account activation with temp tokens
 - `ResetableTrait` - Password reset token handling
+- `RefreshableTrait` - JWT refresh token storage
+
+Reset and activation tokens record when they were minted (`reset_token_created` / `temp_token_created`) and expire after their TTL. Check with `isResetTokenValid()` / `isTempTokenValid()` or look up via `UserRepository::withValidResetToken()` / `withValidTempToken()`.
+
+Custom column names are set by overriding the static `get*Field()` getters. The `$*Field` properties the docblocks mention cannot be overridden (PHP fatal error, see sc-11467).
 
 ### Service Provider Registration
 
@@ -44,7 +50,12 @@ make phpstan         # Run PHPStan static analysis (level 6)
 - `accounts.storage` - User storage implementation
 - `accounts.factory` - User factory implementation
 - `accounts.repository` - User repository implementation
+- `accounts.auth_class` - Authentication implementation
 - `accounts.use_legacy_hash` - Enable legacy MD5+salt password verification
+- `accounts.reset_token_ttl` - Reset token lifetime in seconds (default: 3600)
+- `accounts.activation_token_ttl` - Activation token lifetime in seconds (default: 604800)
+- `accounts.jwt_secret` - JWT signing secret, minimum 32 bytes
+- `accounts.token_expiry_time` / `accounts.refresh_token_expiry_time` - JWT lifetimes in seconds (defaults: 3600 / 7200)
 
 ### Events
 
@@ -52,6 +63,6 @@ Events dispatched via Oak Dispatcher: `Authenticated`, `Logout`, `Created`, `Act
 
 ### Database Migrations
 
-Run with: `php oak migration migrate -m accounts`
+Run with: `php oak migration migrate -m account` (the migrator is named `account`, singular)
 
 Tables: `account_user` with fields dynamically created based on which interfaces the model implements.

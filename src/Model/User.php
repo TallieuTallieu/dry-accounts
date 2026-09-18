@@ -20,7 +20,9 @@ use Tnt\Account\Traits\User\ResetableTrait;
  * @property string $password Hashed password
  * @property string $password_salt Password salt for hashing
  * @property string|null $temp_token Temporary activation token
+ * @property int|null $temp_token_created Timestamp the activation token was minted
  * @property string $reset_token Password reset token
+ * @property int|null $reset_token_created Timestamp the reset token was minted
  * @property bool $is_activated Whether the user account is activated
  * @property int $created Timestamp when user was created
  * @property int $updated Timestamp when user was last updated
