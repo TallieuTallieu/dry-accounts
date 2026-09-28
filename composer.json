@@ -4,12 +4,14 @@
   "type": "library",
   "require": {
     "php": "^8.4",
-    "tallieutallieu/dry": "^v3.8.1-beta.5|^4.0.0",
-    "tallieutallieu/oak": "^3.0.2 || ^4.0",
-    "tallieutallieu/dry-dbi": "^3.8.0",
-    "tallieutallieu/dry-external-api": "^3.0.1",
-    "firebase/php-jwt": "^7.0.3",
-    "phpstan/phpstan": "^2.1"
+    "tallieutallieu/dry": "^4.4.1",
+    "tallieutallieu/oak": "^4.2.2",
+    "tallieutallieu/dry-dbi": "^3.13.3",
+    "tallieutallieu/dry-external-api": "^3.0.3",
+    "firebase/php-jwt": "^7.2.0"
+  },
+  "require-dev": {
+    "phpstan/phpstan": "^2.2"
   },
   "autoload": {
     "psr-4": {

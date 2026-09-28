@@ -30,11 +30,14 @@ class AlterUserTableAddRefreshToken implements RevisionInterface
      */
     public function up(): void
     {
-        $this->queryBuilder->table('account_user')->alter(function (TableBuilder $table) {
-
-            $table->addColumn('refresh_token', 'varchar')->length(255);
-            $table->addColumn('refresh_token_expiry_time', 'int')->length(11);
-        });
+        $this->queryBuilder
+            ->table('account_user')
+            ->alter(function (TableBuilder $table) {
+                $table->addColumn('refresh_token', 'varchar')->length(255);
+                $table
+                    ->addColumn('refresh_token_expiry_time', 'int')
+                    ->length(11);
+            });
 
         $this->queryBuilder->build();
 
@@ -48,11 +51,12 @@ class AlterUserTableAddRefreshToken implements RevisionInterface
      */
     public function down(): void
     {
-        $this->queryBuilder->table('account_user')->alter(function (TableBuilder $table) {
-
-            $table->dropColumn('refresh_token');
-            $table->dropColumn('refresh_token_expiry_time');
-        });
+        $this->queryBuilder
+            ->table('account_user')
+            ->alter(function (TableBuilder $table) {
+                $table->dropColumn('refresh_token');
+                $table->dropColumn('refresh_token_expiry_time');
+            });
 
         $this->queryBuilder->build();
 

@@ -177,4 +177,3 @@ trait ActivatableTrait
         return 'temp_token_created';
     }
 }
-

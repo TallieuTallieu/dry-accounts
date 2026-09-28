@@ -31,7 +31,10 @@ use Tnt\Account\Traits\User\ResetableTrait;
  */
 class User extends Model implements UserInterface
 {
-    use ActivatableTrait, AuthenticatableTrait, RefreshableTrait, ResetableTrait;
+    use ActivatableTrait,
+        AuthenticatableTrait,
+        RefreshableTrait,
+        ResetableTrait;
 
     const TABLE = 'account_user';
 
@@ -56,5 +59,4 @@ class User extends Model implements UserInterface
         $this->updated = time();
         parent::save();
     }
-
 }

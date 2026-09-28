@@ -63,7 +63,9 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                 try {
                     $this->useQueryBuilder(function ($qb) use ($password) {
                         $qb->where(
-                            new Raw('MD5( CONCAT( ?, password_salt ) )', [$password]),
+                            new Raw('MD5( CONCAT( ?, password_salt ) )', [
+                                $password,
+                            ]),
                             '=',
                             new Raw('password')
                         );

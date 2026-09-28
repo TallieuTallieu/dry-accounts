@@ -77,7 +77,7 @@ class SessionUserStorage implements UserStorageInterface
 
     /**
      * Check if the session storage is empty (no user identifier stored).
-     * 
+     *
      * @return bool True if session is empty, false otherwise
      */
     public function isEmpty(): bool

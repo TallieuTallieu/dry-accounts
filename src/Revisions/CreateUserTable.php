@@ -79,7 +79,10 @@ class CreateUserTable implements RevisionInterface
                     )
                 ) {
                     $table
-                        ->addColumn($modelClass::getIsActivatedField(), 'tinyint')
+                        ->addColumn(
+                            $modelClass::getIsActivatedField(),
+                            'tinyint'
+                        )
                         ->length(1)
                         ->default(0);
                     $table
@@ -96,7 +99,10 @@ class CreateUserTable implements RevisionInterface
                     )
                 ) {
                     $table
-                        ->addColumn($modelClass::getResetTokenField(), 'varchar')
+                        ->addColumn(
+                            $modelClass::getResetTokenField(),
+                            'varchar'
+                        )
                         ->length(255)
                         ->null();
                 }
