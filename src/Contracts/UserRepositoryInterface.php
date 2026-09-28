@@ -11,7 +11,10 @@ interface UserRepositoryInterface
      * @param string $password
      * @return null|UserInterface
      */
-    public function withCredentials(string $authIdentifier, string $password): ?UserInterface;
+    public function withCredentials(
+        string $authIdentifier,
+        string $password
+    ): ?UserInterface;
 
     /**
      * @param string $authIdentifier

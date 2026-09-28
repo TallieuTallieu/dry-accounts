@@ -60,7 +60,10 @@ class AccountServiceProvider extends ServiceProvider
             'accounts.repository',
             UserRepository::class
         );
-        $app->set(UserRepositoryInterface::class, function ($app) use ($repositoryClass, $model) {
+        $app->set(UserRepositoryInterface::class, function ($app) use (
+            $repositoryClass,
+            $model
+        ) {
             $repository = $app->get($repositoryClass);
             $repository->setModel($model);
             return $repository;
@@ -74,4 +77,3 @@ class AccountServiceProvider extends ServiceProvider
         $app->set(AuthenticationInterface::class, $auth_class);
     }
 }
-

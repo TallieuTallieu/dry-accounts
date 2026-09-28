@@ -21,11 +21,13 @@ make phpstan         # Run PHPStan static analysis (level 6)
 ### Core Components
 
 **Authentication Flow:**
+
 - `Authentication` - Main authentication service handling login, logout, registration, and password reset
 - `AuthController` - REST API controller for JWT-based authentication (authenticate, authorize, refresh-token endpoints)
 - `Auth` (Facade) - Static facade for accessing authentication methods
 
 **User System:**
+
 - `UserInterface` - Combines `AuthenticatableInterface`, `ActivatableInterface`, `ResetableInterface`, and `RefreshableInterface`
 - `User` (Model) - Default user model extending dry ORM with traits for each capability
 - `UserRepository` - Data access layer for user queries (by credentials, identifier, tokens)
@@ -34,6 +36,7 @@ make phpstan         # Run PHPStan static analysis (level 6)
 - `Support\Token` - Generates reset and activation tokens (`random_bytes`, never `uniqid()`)
 
 **Traits (composable user capabilities):**
+
 - `AuthenticatableTrait` - Password hashing/verification, auth identifier field
 - `ActivatableTrait` - Account activation with temp tokens
 - `ResetableTrait` - Password reset token handling
@@ -46,6 +49,7 @@ Custom column names are set by overriding the static `get*Field()` getters. The 
 ### Service Provider Registration
 
 `AccountServiceProvider` registers all services with the Oak container and exposes configuration:
+
 - `accounts.model` - User model class (default: `Tnt\Account\Model\User`)
 - `accounts.storage` - User storage implementation
 - `accounts.factory` - User factory implementation

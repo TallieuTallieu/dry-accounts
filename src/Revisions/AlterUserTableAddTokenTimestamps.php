@@ -56,10 +56,7 @@ class AlterUserTableAddTokenTimestamps implements RevisionInterface
             ->table('account_user')
             ->alter(function (TableBuilder $table) use ($columns) {
                 foreach ($columns as $column) {
-                    $table
-                        ->addColumn($column, 'int')
-                        ->length(11)
-                        ->null();
+                    $table->addColumn($column, 'int')->length(11)->null();
                 }
             });
 

@@ -12,5 +12,9 @@ interface UserFactoryInterface
      * @param array<string, mixed> $data
      * @return null|UserInterface
      */
-    public function register(string $authIdentifier, string $password, array $data = []): ?UserInterface;
+    public function register(
+        string $authIdentifier,
+        string $password,
+        array $data = []
+    ): ?UserInterface;
 }

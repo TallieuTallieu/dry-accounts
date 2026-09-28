@@ -10,5 +10,6 @@ services:
       - .:/var/www/html
       - ~/.ssh:/root/.ssh:ro
     ports:
-      - "80"
-    command: ["sh", "-c", "eval `ssh-agent -s` && ssh-add && apache2ctl -D FOREGROUND"]
+      - '80'
+    command:
+      ['sh', '-c', 'eval `ssh-agent -s` && ssh-add && apache2ctl -D FOREGROUND']
